@@ -1,5 +1,5 @@
 <p align="center">
-  <h1 align="center">DrivingForward: Feed-forward 3D Gaussian Splatting <br> for Driving Scene Reconstruction from Flexible Surround-view Input</h1>
+  <h1 align="center">DrivingForward: Feed-forward 3D Gaussian Splatting for Driving Scene Reconstruction from Flexible Surround-view Input</h1>
   <p align="center">
     <a href="https://fangzhou2000.github.io/">Qijian Tian</a><sup>1</sup>
     &nbsp;·&nbsp;
