@@ -49,6 +49,8 @@ class PoseNetwork(nn.Module):
 
         # packed images for surrounding view
         cur_image = inputs[('color_aug', frame_ids[0], 0)]
+        if cur_image.dim() == 4:  # [n_cam, C, H, W]
+            cur_image = cur_image.unsqueeze(1)
         next_image = inputs[('color_aug', frame_ids[1], 0)]
         
         pose_images = torch.cat([cur_image, next_image], 2)

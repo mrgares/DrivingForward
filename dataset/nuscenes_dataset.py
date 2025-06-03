@@ -28,7 +28,14 @@ def stack_sample(sample):
     """Stack a sample from multiple sensors"""
     # If there is only one sensor don't do anything
     if len(sample) == 1:
-        return sample[0]
+        # Still stack dimensions to preserve 4D shape
+        stacked_sample = {}
+        for key in sample[0]:
+            if isinstance(sample[0][key], torch.Tensor):
+                stacked_sample[key] = sample[0][key].unsqueeze(0)
+            else:
+                stacked_sample[key] = sample[0][key]
+        return stacked_sample
 
     # Otherwise, stack sample
     stacked_sample = {}
@@ -138,7 +145,11 @@ class NuScenesdataset(Dataset):
             if self.split == 'eval_SF': # validation
                 bwd_sample = cam_sample
             else:
-                bwd_sample = self.dataset.get('sample_data', cam_sample['prev'])
+                if cam_sample['prev'] == '':
+                    # use current sample if no previous sample exists
+                    bwd_sample = cam_sample
+                else:
+                    bwd_sample = self.dataset.get('sample_data', cam_sample['prev'])
             bwd_context = [self.get_current(key, bwd_sample)]
 
         if self.fwd != 0:
@@ -178,7 +189,11 @@ class NuScenesdataset(Dataset):
             if self.split == 'eval_SF': # validation
                 bwd_sample = cam_sample
             else:
-                bwd_sample = self.dataset.get('sample_data', cam_sample['prev'])
+                if cam_sample['prev'] == '':
+                    # use current sample if no previous sample exists
+                    bwd_sample = cam_sample
+                else:
+                    bwd_sample = self.dataset.get('sample_data', cam_sample['prev'])
 
             # world to ego -1
             world_to_ego_bwd = self.dataset.get(
